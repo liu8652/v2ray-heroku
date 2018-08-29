@@ -23,7 +23,6 @@ import (
 	"v2ray.com/core/proxy/vmess/inbound"
 	"v2ray.com/core/common/protocol"
 	"v2ray.com/core/common/serial"
-	"v2ray.com/core/common/uuid"
 	"v2ray.com/core/proxy/freedom"
 	"v2ray.com/core/proxy/vmess"
 )
@@ -101,11 +100,12 @@ func startV2Ray() (core.Server, error) {
 	//host := os.Getenv("HOST")
 	port := os.Getenv("PORT")
 	host := "0.0.0.0"
+	userID := os.Getenv("UUID")
 	fmt.Println("host: ", host)
 	fmt.Println("port: ", port)
+	fmt.Println("UUID: ", userID)
 	//host := "0.0.0.0"
 	//port := "443"
-	userID := protocol.NewID(uuid.New())
 	serverPort, _ := net.PortFromString(port)
 	serverIP := net.ParseAddress(host)
 	serverConfig := &core.Config{
@@ -126,7 +126,7 @@ func startV2Ray() (core.Server, error) {
 					User: []*protocol.User{
 						{
 							Account: serial.ToTypedMessage(&vmess.Account{
-								Id:      userID.String(),
+								Id:      userID,
 								AlterId: 64,
 							}),
 						},

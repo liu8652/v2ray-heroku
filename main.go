@@ -101,9 +101,11 @@ func startV2Ray() (core.Server, error) {
         //fmt.Println(receiverSettings.PortRange)
 	host := os.Getenv("HOST")
 	port := os.Getenv("PORT")
+	//host := "0.0.0.0"
+	//port := "443"
 	userID := protocol.NewID(uuid.New())
 	serverPort, _ := net.PortFromString(port)
-	serverIP := net.DomainAddress(host)
+	serverIP := net.ParseAddress(host)
 	serverConfig := &core.Config{
 		Inbound: []*core.InboundHandlerConfig{
 			{

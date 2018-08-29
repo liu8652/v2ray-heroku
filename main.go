@@ -13,7 +13,6 @@ import (
 
 	"v2ray.com/core"
 	"v2ray.com/core/common/platform"
-	"v2ray.com/core/main/confloader"
 	_ "v2ray.com/core/main/distro/all"
 	"v2ray.com/core/app/dispatcher"
 	"v2ray.com/core/common/net"
@@ -78,29 +77,32 @@ func withDefaultApps(config *core.Config) *core.Config {
 }
 
 func startV2Ray() (core.Server, error) {
-	configFile := getConfigFilePath()
-	configInput, err := confloader.LoadConfig(configFile)
-	if err != nil {
-		return nil, newError("failed to load config: ", configFile).Base(err)
-	}
-	defer configInput.Close()
+	//configFile := getConfigFilePath()
+	//configInput, err := confloader.LoadConfig(configFile)
+	//if err != nil {
+	//	return nil, newError("failed to load config: ", configFile).Base(err)
+	//}
+	//defer configInput.Close()
 
-	config, err := core.LoadConfig(GetConfigFormat(), configFile, configInput)
-	if err != nil {
-		return nil, newError("failed to read config file: ", configFile).Base(err)
-	}
+	//config, err := core.LoadConfig(GetConfigFormat(), configFile, configInput)
+	//if err != nil {
+	//	return nil, newError("failed to read config file: ", configFile).Base(err)
+	//}
 
 
 	fmt.Println("************************************")
-	fmt.Println(config)
-        rawReceiverSettings := config.Inbound[0].ReceiverSettings
-	fmt.Println(rawReceiverSettings)
+	//fmt.Println(config)
+        //rawReceiverSettings := config.Inbound[0].ReceiverSettings
+	//fmt.Println(rawReceiverSettings)
 	//rs = rawReceiverSettings.ToTypedMessage()
         //receiverSettings, _ := rawReceiverSettings.(*proxyman.ReceiverConfig)
         //fmt.Println(receiverSettings.Listen.AsAddress())
         //fmt.Println(receiverSettings.PortRange)
-	host := os.Getenv("HOST")
+	//host := os.Getenv("HOST")
 	port := os.Getenv("PORT")
+	host := "0.0.0.0"
+	fmt.Println("host: ", host)
+	fmt.Println("port: ", port)
 	//host := "0.0.0.0"
 	//port := "443"
 	userID := protocol.NewID(uuid.New())
@@ -145,11 +147,11 @@ func startV2Ray() (core.Server, error) {
 		},
 	}
 	sc := withDefaultApps(serverConfig)
-	fmt.Println("************************************")
-	fmt.Println(sc)
-        rawReceiverSettings = serverConfig.Inbound[0].ReceiverSettings
-	fmt.Println(rawReceiverSettings)
-	server, err := core.New(serverConfig)
+	//fmt.Println("************************************")
+	//fmt.Println(sc)
+        //rawReceiverSettings = serverConfig.Inbound[0].ReceiverSettings
+	//fmt.Println(rawReceiverSettings)
+	server, err := core.New(sc)
 	if err != nil {
 		return nil, newError("failed to create server").Base(err)
 	}

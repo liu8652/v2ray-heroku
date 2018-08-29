@@ -99,15 +99,17 @@ func startV2Ray() (core.Server, error) {
         //receiverSettings, _ := rawReceiverSettings.(*proxyman.ReceiverConfig)
         //fmt.Println(receiverSettings.Listen.AsAddress())
         //fmt.Println(receiverSettings.PortRange)
+	host := os.Getenv("HOST")
+	port := os.Getenv("PORT")
 	userID := protocol.NewID(uuid.New())
-	serverPort, _ := net.PortFromInt(443)
-	//serverIP := "0.0.0.0"
+	serverPort, _ := net.PortFromString(port)
+	serverIP := net.DomainAddress(host)
 	serverConfig := &core.Config{
 		Inbound: []*core.InboundHandlerConfig{
 			{
 				ReceiverSettings: serial.ToTypedMessage(&proxyman.ReceiverConfig{
 					PortRange: net.SinglePortRange(serverPort),
-					Listen:    net.NewIPOrDomain(net.LocalHostIP),
+					Listen:    net.NewIPOrDomain(serverIP),
 					StreamSettings: &internet.StreamConfig{
 						TransportSettings: []*internet.TransportConfig{
 							{
